@@ -50,6 +50,7 @@ const issueGatewayBadge = async (userWallet: string, profileAddress: string, iss
   }
 
   try {
+    console.log("Sending request to gateway server");
     const data = await request(GATEWAY_URL, mutation, variables, {
       'x-api-key': API_KEY,
       'authorization': `Bearer ${BEARER_TOKEN}`
@@ -57,6 +58,7 @@ const issueGatewayBadge = async (userWallet: string, profileAddress: string, iss
 
     return data;
   } catch (error) {
+    console.log("Error sending request to gateway server");
     console.error(error);
     throw error;
   }

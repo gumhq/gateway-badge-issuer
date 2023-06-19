@@ -11,7 +11,10 @@ router.post('/issueBadge', async (req, res) => {
   } = req.body;
 
   const message = new TextEncoder().encode("Issue Gateway Badge");
-  const verify = nacl.sign.detached.verify(message, signature, new PublicKey(authority).toBuffer());
+  const messageUint8 = new Uint8Array(message);
+  const signatureUint8 = new Uint8Array(Buffer.from(signature));
+  const authorityUint8 = new Uint8Array(new PublicKey(authority).toBuffer());
+  const verify = nacl.sign.detached.verify(messageUint8, signatureUint8, authorityUint8);
   if (!verify) {
     return res.status(400).json({ error: 'Invalid signature' });
   }
