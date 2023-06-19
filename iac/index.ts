@@ -33,6 +33,7 @@ const envs = [
 
 // Create a Cloud Run service that runs the app image.
 const service = new gcp.cloudrun.Service(name, {
+    name:"issue-gateway-credentials",
     location,
     template: {
         spec: {
