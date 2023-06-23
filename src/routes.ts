@@ -1,6 +1,6 @@
 import express from 'express';
 import nacl from 'tweetnacl'
-import { issueGatewayBadge, queryCredentialsByIssuerGatewayId } from './gateway';
+import { issueGatewayBadge, queryCredentialsByCredentialId, queryCredentialsByIssuerGatewayId, queryCredentialsByUserWallet } from './main';
 import { PublicKey } from '@solana/web3.js';
 
 const router = express.Router();
@@ -37,6 +37,38 @@ router.get('/getCredentials', async (req, res) => {
 
   try {
     const data = await queryCredentialsByIssuerGatewayId(issuerGatewayId);
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+router.get('/getCredentialsById', async (req, res) => {
+  const credentialId = req.query.credentialId as string;
+
+  if (!credentialId) {
+    return res.status(400).json({ error: 'credentialId is required' });
+  }
+
+  try {
+    const data = await queryCredentialsByCredentialId(credentialId);
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+router.get('/getCredentialsByUserWallet', async (req, res) => {
+  const userWallet = req.query.userWallet as string;
+
+  if (!userWallet) {
+    return res.status(400).json({ error: 'userWallet is required' });
+  }
+
+  try {
+    const data = await queryCredentialsByUserWallet(userWallet);
     res.json(data);
   } catch (err) {
     console.error(err);
